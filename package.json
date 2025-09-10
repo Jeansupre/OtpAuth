@@ -1,7 +1,7 @@
 {
   "name": "otpauth",
   "version": "1.0.0",
-  "description": "Proyecto de implementación de autenticación sin contraseñas (passwordless) mediante códigos TOTP integrados con Google Authenticator.",
+  "description": "Project to implement passwordless authentication using TOTP codes, integrated with Google Authenticator.",
   "homepage": "https://github.com/Jeansupre/otpAuth#readme",
   "bugs": {
     "url": "https://github.com/Jeansupre/otpAuth/issues"
@@ -31,11 +31,13 @@
     "qrcode": "1.5.4",
     "sequelize": "6.37.7",
     "sequelize-typescript": "2.1.6",
+    "thirty-two": "^1.0.2",
     "winston": "3.17.0"
   },
   "devDependencies": {
     "@types/express": "5.0.3",
     "@types/node": "24.3.1",
+    "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "8.43.0",
     "@typescript-eslint/parser": "8.43.0",
     "eslint": "9.35.0",

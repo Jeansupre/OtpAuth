@@ -1,8 +1,8 @@
 import { sequelize } from "./infra/db/sequelize";
 import logger from "./config/logger";
-import { createServer } from "http";
+import { createServer } from "./infra/http/express-server";
 
-const app = createServer();
+const app = createServer(); 
 
 async function bootstrap() {
   try {

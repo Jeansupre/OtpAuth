@@ -1,26 +1,31 @@
-import { Request, Response } from "express";
 import { User } from "../infra/db/models/user";
 import logger from "../config/logger";
+import { randomBytes } from "crypto";
+let b32 = require('thirty-two');
 
 function generateStringRandom() {
-	return crypto.getRandomValues(new Uint8Array(20)).toString().toUpperCase();
+	const secret = randomBytes(20);
+	return b32.encode(secret).toString().toUpperCase();
 }
 
-export async function generateOtpSecret(req: Request, res: Response) {
-	const { username } = req.body;
-	if (!username) {
-		return res.status(400).json({ error: "Falta el username" });
-	}
+export async function generateOtpSecret(username: string) {
 	try {
+		if (!username) {
+			logger.error("Missing username");
+			throw new Error("Missing username");
+		}
 		const user = await User.findOne({ where: { username } });
 		if (!user) {
-            throw new Error();
+			logger.error("User not found");
+            throw new Error("User not found");
 		}
-        user.secret = generateStringRandom();
-        await user.save();
-        return res.status(201).json({ message: "Secreto generado y guardado", secret: user.secret });
+		if (!user.secret_otp) {
+			user.secret_otp = generateStringRandom();
+			await user.save();
+		}
+		return user.secret_otp;
 	} catch (error) {
-		logger.error("Error al generar el secreto:", error);
-		return res.status(409).json({ error: "Error al generar el secreto" });
+		logger.error("Error while generating the secret key:", error);
+		throw error;
 	}
 }

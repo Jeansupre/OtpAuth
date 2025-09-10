@@ -1,6 +1,6 @@
 import { AutoIncrement, Column, PrimaryKey, Table, Model } from "sequelize-typescript";
 
-@Table({tableName: "users"})
+@Table({tableName: "users", timestamps: false})
 export class User extends Model {
 
     @PrimaryKey
@@ -11,6 +11,6 @@ export class User extends Model {
     @Column({ unique: true, allowNull: false })
     username!: string;
 
-    @Column
-    secret!: string;
+    @Column({ allowNull: true })
+    secret_otp!: string;
 }
