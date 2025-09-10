@@ -1,0 +1,29 @@
+{
+  "url": "https://rsi.uis.edu.co/develop/metadatos/public/api/I18NMensajes/allGeneralAndBy",
+  "method": "GET",
+  "params": {
+    "module": "otpauth"
+  },
+  "settings": {
+    "1": {
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json",
+        "Next-Accept-Language": "es"
+      },
+      "lang": "es",
+      "body": {}
+    },
+    "2": {
+      "params": {},
+      "headers": {
+        "Content-Type": "application/json",
+        "Next-Accept-Language": "en"
+      },
+      "lang": "en",
+      "body": {}
+    }
+  },
+  "responsePath": "module",
+  "ignoreCertificateErrors": true
+}
