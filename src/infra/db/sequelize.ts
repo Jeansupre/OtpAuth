@@ -2,7 +2,9 @@ import { Sequelize } from "sequelize-typescript";
 import { User } from "./models/user";
 import logger from "../../config/logger";
 
-
+/**
+ * Sequelize instance for database connection
+ */
 export const sequelize = new Sequelize( 
   "otp_data",
   "postgres",

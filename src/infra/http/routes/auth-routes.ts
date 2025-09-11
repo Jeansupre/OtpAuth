@@ -1,26 +1,25 @@
 import { Router } from "express";
-import logger from "../../../config/logger";
+import { generateQrUri } from "../../qr/qr-generate";
+import { registerOtpSecret } from "../../../app/use-cases/generate-secret";
+import { loginWithOtpCode } from "../../../app/use-cases/validate-otp";
 
 const router = Router();
 
-// Registro de usuario → genera secreto y QR
+// Register → generate OTP secret and QR
 router.post("/register", async (req, res) => {
-    const { account = "user@example.com", issuer = "OtpAuthApp" } = req.body;
 
-    //   const { secret } = generateOtpSecret();
-    //   const { otpauthUrl, qrImage } = await generateQrUri(secret, account, issuer);
+    const { username, secret } = await registerOtpSecret(req);
+    const qrImage = await generateQrUri(secret, username, "MyApp");
 
-    res.json({ });
+    res.set("Content-Type", "image/png");
+    res.send(qrImage);
 });
 
-// Login → valida OTP
-router.post("/login", (req, res) => {
-    logger.info("Hace algo");
-    const { secret, code } = req.body;
-    if (!secret || !code) return res.status(400).json({ error: "Datos faltantes" });
+// Login → validate OTP
+router.post("/login", async (req, res) => {
 
-    //   const isValid = validateOtpCode(secret, code);
-    //   if (!isValid) return res.status(401).json({ success: false });
+    const isValid = await loginWithOtpCode(req);
+    if (!isValid) return res.status(401).json({ success: false });
 
     res.json({ success: true });
 });
