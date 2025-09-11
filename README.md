@@ -19,7 +19,7 @@ Project to implement passwordless authentication using TOTP codes, based in [RFC
 
 1. Clone the repository
 2. Install dependencies using `npm install`
-3. Set up the PostgreSQL database and configure the connection in `config.js`
+3. Set up the PostgreSQL database and configure the connection in `src\infra\db\sequelize.ts`
 4. Start the server using `npm run dev`
 5. Register a new user directly in the database
 6. Do a request to <http://localhost:3000/auth/register> and scan the QR code with Google Authenticator to set up OTP
