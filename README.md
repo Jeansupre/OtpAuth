@@ -1,6 +1,7 @@
 # OtpAuth
 
 ![Node.js version](https://img.shields.io/badge/Node.js-24.4.1-green)
+[![Postman Collection](https://img.shields.io/badge/Postman-Collection-orange)](https://otp-auth.postman.co/workspace/Team-Workspace~ea11a8bd-8a06-4238-8b77-36ea8bb55e24/collection/48347840-487cfeb6-66bb-4a3b-8e47-0d14c6dfdb8d?action=share&creator=48347840)
 
 Project to implement passwordless authentication using TOTP codes, based in [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238) and [RFC 4226](https://datatracker.ietf.org/doc/html/rfc4226), integrated with Google Authenticator.
 
