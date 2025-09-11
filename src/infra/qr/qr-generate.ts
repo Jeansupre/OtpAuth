@@ -1,5 +1,12 @@
 import QRCode from "qrcode";
 
+/**
+ * Generate a QR code URI for OTP authentication.
+ * @param secret - The OTP secret key
+ * @param account - The account name or email
+ * @param issuer - The issuer name (e.g., your app name)
+ * @returns A buffer containing the QR code image
+ */
 export async function generateQrUri(secret: string, account: string, issuer: string) {
   // Standard URL otpauth:// for Google Authenticator
   const otpauthUrl = `otpauth://totp/${issuer}:${account}?secret=${secret}&issuer=${issuer}`;
