@@ -19,6 +19,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
 
     const isValid = await loginWithOtpCode(req);
+    if (isValid === null) return res.status(423).json({ success: false, message: "User is blocked due to multiple failed attempts" });
     if (!isValid) return res.status(401).json({ success: false });
 
     res.json({ success: true });

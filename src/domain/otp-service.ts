@@ -1,7 +1,10 @@
 import { User } from "../infra/db/models/user";
 import logger from "../config/logger";
 import { randomBytes, createHmac } from "crypto";
+import NodeCache from "node-cache";
 let b32 = require('thirty-two');
+
+const cache = new NodeCache({ stdTTL: 0 });
 
 /**
 * Generate a random base32 string.
@@ -53,7 +56,7 @@ export async function generateOtpSecret(username: string) {
  * @param code - The OTP code to validate.
  * @returns True if the OTP code is valid, false otherwise.
  */
-export async function validateOtpCode(username: string, code: string): Promise<boolean> {
+export async function validateOtpCode(username: string, code: string): Promise<boolean | null> {
     try {
         if (!username || !code) {
             logger.error("Missing data");
@@ -64,11 +67,38 @@ export async function validateOtpCode(username: string, code: string): Promise<b
             logger.error("User not found or secret not set");
             throw new Error("User not found or secret not set");
         }
-        return validateOtpCodeGenerated(user.secret_otp, code);
+        if (user.bloqueo === 1) {
+          logger.error("User is blocked due to multiple failed attempts");
+          return null;
+        }
+        if (validateOtpCodeGenerated(user.secret_otp, code)) {
+            return true;
+        } else {
+            logger.error("Invalid OTP code");
+            return await blockUser(user);
+        }
     } catch (error) {
         logger.error("Error validating OTP code:", error);
         throw new Error("Error validating OTP code");
     }
+}
+
+/**
+ * Blocks a user after multiple failed OTP attempts.
+ * @param user - The user to block
+ * @returns True if the user is blocked, false otherwise
+ */
+async function blockUser(user: User): Promise<boolean | null> {
+  const cacheValue = cache.get<{ attempts?: number }>(`otp:${user.username}`) || {};
+  const attempts = typeof cacheValue.attempts === "number" ? cacheValue.attempts : 0;
+  const actualAttempts = attempts + 1;
+  cache.set(`otp:${user.username}`, { attempts: actualAttempts });
+  if (actualAttempts >= 3) {
+    user.bloqueo = 1;
+    await user.save();
+    return null;
+  }
+  return false;
 }
 
 /**
