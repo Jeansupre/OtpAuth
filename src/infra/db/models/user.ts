@@ -13,4 +13,7 @@ export class User extends Model {
 
     @Column({ allowNull: true })
     secret_otp!: string;
+
+    @Column
+    bloqueo!: number;
 }
