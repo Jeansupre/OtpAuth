@@ -2,7 +2,7 @@ import { User } from "../infra/db/models/user";
 import logger from "../config/logger";
 import { randomBytes, createHmac } from "crypto";
 import NodeCache from "node-cache";
-let b32 = require('thirty-two');
+import { decode, encode } from "hi-base32";
 
 const cache = new NodeCache({ stdTTL: 0 });
 
@@ -12,7 +12,7 @@ const cache = new NodeCache({ stdTTL: 0 });
 */
 function generateStringRandom() {
   const secret = randomBytes(20);
-  return b32.encode(secret).toString().replace(/=+$/, "").toUpperCase();
+  return encode(secret).toString().replace(/=+$/, "").toUpperCase();
 }
 
 /**
@@ -138,7 +138,7 @@ function createOtpCode(secretUser: string, counter: Buffer): string {
   * @returns HMAC-SHA1 hash in Buffer format
   */
 function generateHmacSha1(secret: string, counter: Buffer): Buffer {
-  const key = b32.decode(secret);
+  const key = Buffer.from(decode(secret));
   const hmac = createHmac('sha1', key);
   hmac.update(counter);
   return hmac.digest();
